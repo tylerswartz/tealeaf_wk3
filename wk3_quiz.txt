@@ -1,0 +1,42 @@
+Week 3 Quiz:
+
+1) What is HTML? What is CSS? What is Javascript?
+HTML is the primary language used to create websites and can be processed by web browsers to display a page. CSS is the style guide for HTML. It basically tells the browser how to display the HTML. Javascript is a programming language that enables developers to implement scripts and other ways to minipulate the HTML and communicate with the server. 
+
+2) What are the major parts of an HTTP request?
+Primary components are HTTP verb/method, URL, and parameters.
+
+3) What are the major parts of an HTTP response?
+Primary components are status code and payload.
+
+4) How do you submit an HTTP POST request, with a "username" attribute set to "bob"? What if we wanted a GET request instead?
+> post '/myaction' do
+>		params['username']
+> end
+
+5) Why is it important for us, as web developers, to understand that HTTP is a "stateless" protocol?
+Since it is stateless developers must simulate persistance.
+
+6) If the internet is just HTTP requests/responses, why do we only use browsers to interface with web applications? Are there any other options?
+
+
+7) What is MVC, and why is it important?
+It stands for model-view-controller. It is a type of HTML framework. It divides a online application into three distinct but connected parts. This seperates the internal side of data processing from what is represented on the user side.
+
+The below questions are about Sinatra:
+
+1) At a high level, how are requests processed?
+Sinatra processes requests via the controller and then either redirects or renders a view.
+
+2) In the controller/action, what's the difference between rendering and redirecting?
+Redirecting means to send a new request elsewhere. Rendering is pulling the requested view and displaying it for the user.
+
+3) In the ERB view template, how do you show dynamic content?
+You can utilize <% code that doesn't need to be printed to HTML %> and <%= code that should be printed to HTML %>.
+
+4) Given what you know about ERB templates, when do you suppose the ERB template is turned into HTML?
+I think it is turned into HTML when the view is rendered.
+
+5) What's the role of instance variables in Sinatra?
+Instance variables are used to simulate persistence to the user. 
+
