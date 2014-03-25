@@ -1,0 +1,14 @@
+<h3 class="white">Place your bet for this round.</h3>
+
+<% if session[:player_pot] > 25 %>
+	<p class="white">You have a total of $<%= session[:player_pot].to_i %>. The minimum bet is $25.</p>
+
+	<form action='/bet' method='post'>
+		<input type="text" name="bet_amount" />
+		<br/>
+		<input type="submit" value="Place Bet" class="btn" />
+	</form>
+<% else %>
+	<p class="white">Looks like you don't have enough $$ for this table.</p>
+	<p class="white">Why don't you go try the penny slots....or hit Start New Game.</p>
+<% end %>

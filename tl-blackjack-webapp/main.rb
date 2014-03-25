@@ -50,19 +50,21 @@ helpers do
 	def winner!(msg)
 		@play_again = true
 		@show_hit_or_stay_buttons = false
-		@success = "<strong>You won!</strong> #{msg}"
+		session[:player_pot] = session[:player_pot] + session[:player_bet]
+		@winner = "<strong>You won!</strong> #{msg}"
 	end
 
 	def loser!(msg)
 		@play_again = true
 		@show_hit_or_stay_buttons = false
-		@error = "<strong>You lost!</strong> #{msg}"
+		session[:player_pot] = session[:player_pot] - session[:player_bet]
+		@loser = "<strong>You lost!</strong> #{msg}"
 	end
 
 	def tie!(msg)
 		@play_again = true
 		@show_hit_or_stay_buttons = false
-		@error = "<strong>You both tied with #{player_total}!</strong> #{msg}"
+		@loser = "<strong>Push.</strong> #{msg}"
 	end
 
 end
@@ -80,6 +82,7 @@ get '/' do
 end
 
 get '/new_player' do
+	session[:player_pot] = 500
 	erb :new_player
 end
 
@@ -90,7 +93,25 @@ post '/new_player' do
 	end
 
 	session[:player_name] = params[:player_name]
-	redirect '/game'
+	redirect '/bet'
+end
+
+get '/bet' do
+	session[:player_bet] = nil
+	erb :bet
+end
+
+post '/bet' do
+	if params[:bet_amount].nil? || params[:bet_amount].to_i < 25
+		@error = "The table minimum is $25."
+		halt erb(:bet)
+	elsif params[:bet_amount].to_i > session[:player_pot]
+		@error = "You cannot bet more than $#{session[:player_pot]}."
+		halt erb(:bet)
+	else
+		session[:player_bet] = params[:bet_amount].to_i
+		redirect '/game'
+	end
 end
 
 get '/game' do
@@ -120,7 +141,7 @@ post '/game/player/hit' do
 		loser!("You busted.")
 	end
 
-	erb :game
+	erb :game, layout: false
 end
 
 post '/game/player/stay' do
@@ -145,7 +166,7 @@ get '/game/dealer' do
 
 	end
 
-	erb :game		
+	erb :game, layout: false		
 end
 
 post '/game/dealer/hit' do
@@ -164,10 +185,10 @@ get '/game/compare' do
 	elsif player_total > dealer_total
 		winner!("Your total: #{player_total}. The dealer's total: #{dealer_total}.")
 	else
-		tie!("")
+		tie!("You both had #{player_total}.")
 	end
 
-	erb :game
+	erb :game, layout: false
 
 end
 
